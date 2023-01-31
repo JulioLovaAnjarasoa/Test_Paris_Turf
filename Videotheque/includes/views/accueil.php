@@ -12,8 +12,6 @@ function get_movies_types($apiKey)
 function get_movies_list($apiKey)
 {
     $url = "https://api.themoviedb.org/3/discover/movie?api_key=" . $apiKey;
-    // $url = "https://api.themoviedb.org/3/movie/popular?api_key=" . $apiKey;
-    // https: //api.themoviedb.org/3/discover/movie?api_key=<<api_key>>
     $movies_list = get_api($url);
 
     return $movies_list;
@@ -22,10 +20,17 @@ function get_movies_list($apiKey)
 function get_popular_movies($apiKey)
 {
     $url = "https://api.themoviedb.org/3/movie/top_rated?api_key=" . $apiKey;
-    // $url = "https://api.themoviedb.org/3/movie/popular?api_key=" . $apiKey;
     $popular_movies = get_api($url);
 
     return $popular_movies;
+}
+
+function get_movies_by_types($apiKey, $id)
+{
+    $url = "https://api.themoviedb.org/3/movie/" . $id . "/lists?api_key=" . $apiKey;
+    $movies_list = get_api($url);
+
+    return $movies_list;
 }
 
 ?>
@@ -54,7 +59,7 @@ function get_popular_movies($apiKey)
                         $movies_types = get_movies_types($apiKey)['genres'];
                         foreach ($movies_types as $type) {
                         ?><li class="nav-item">
-                                <a href="#" class="nav-link align-middle px-0">
+                                <a href="?genre=<?php echo $type['id']; ?>" class="nav-link align-middle px-0">
                                     <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline"><?php echo $type['name']; ?></span>
                                 </a>
                             </li>
@@ -65,51 +70,87 @@ function get_popular_movies($apiKey)
                     <hr>
                 </div>
             </div>
-            <div class="col py-3">
-                <div class="row">
-                    <h3>Top rated movies</h3>
-                    <?php
-                    $popular_movies = get_popular_movies($apiKey)['results'];
-                    foreach ($popular_movies as $movie) {
-                    ?>
-                        <div class="col-2 card mb-2">
-                            <div class="col-md-4">
-                                <a href=""><img src="https://image.tmdb.org/t/p/original/<?php echo $movie['poster_path'] ?>" class="img-fluid rounded-start" alt="..."></a>
-                            </div>
-                        </div>
-                    <?php
+            <?php
+            if (isset($_GET['genre'])) {
+            ?>
+                <div class="col py-3">
+                    <div class="row">
+                        <h1>Discover Movies</h1>
+                        <?php
+                        $movies = get_movies_by_types($apiKey, $_GET['genre'])['results'];
+                        var_dump($movies);
+                        foreach ($movies as $movie) {
+                        ?>
+                            <div class="col-4 card mb-2">
+                                <div class="">
+                                    <a href=""><img src="https://image.tmdb.org/t/p/original/<?php echo $movie['poster_path'] ?>" class="img-fluid rounded-start" alt="..."></a>
+                                </div>
+                                <div class="">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $movie['original_title']; ?></h5>
+                                        <p class="card-text"><small class="text-muted"></small></p>
+                                        <p class="card-text"><?php echo $movie['overview']; ?></p>
 
-                    }
-                    ?>
-
-                </div>
-                <div class="row">
-                    <h1>Discover Movies</h1>
-                    <?php
-                    $movies = get_movies_list($apiKey)['results'];
-                    // var_dump($movies);
-                    // die();
-                    foreach ($movies as $movie) {
-                    ?>
-                        <div class="col-4 card mb-2">
-                            <div class="">
-                                <a href=""><img src="https://image.tmdb.org/t/p/original/<?php echo $movie['poster_path'] ?>" class="img-fluid rounded-start" alt="..."></a>
-                            </div>
-                            <div class="">
-                                <div class="card-body">
-                                    <h5 class="card-title"><?php echo $movie['original_title']; ?></h5>
-                                    <p class="card-text"><small class="text-muted"></small></p>
-                                    <p class="card-text"><?php echo $movie['overview']; ?></p>
-
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php
-                    }
+                        <?php
+                        }
 
-                    ?>
+                        ?>
+                    </div>
                 </div>
-            </div>
+            <?php
+            } else {
+            ?>
+                <div class="col py-3">
+                    <div class="row">
+                        <h3>Top rated movies</h3>
+                        <?php
+                        $popular_movies = get_popular_movies($apiKey)['results'];
+                        foreach ($popular_movies as $movie) {
+                        ?>
+                            <div class="col-2 card mb-2">
+                                <div class="col-md-4">
+                                    <a href=""><img src="https://image.tmdb.org/t/p/original/<?php echo $movie['poster_path'] ?>" class="img-fluid rounded-start" alt="..."></a>
+                                </div>
+                            </div>
+                        <?php
+
+                        }
+                        ?>
+
+                    </div>
+                    <div class="row">
+                        <h1>Discover Movies</h1>
+                        <?php
+                        $movies = get_movies_list($apiKey)['results'];
+                        // var_dump($movies);
+                        // die();
+                        foreach ($movies as $movie) {
+                        ?>
+                            <div class="col-4 card mb-2">
+                                <div class="">
+                                    <a href=""><img src="https://image.tmdb.org/t/p/original/<?php echo $movie['poster_path'] ?>" class="img-fluid rounded-start" alt="..."></a>
+                                </div>
+                                <div class="">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $movie['original_title']; ?></h5>
+                                        <p class="card-text"><small class="text-muted"></small></p>
+                                        <p class="card-text"><?php echo $movie['overview']; ?></p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        <?php
+                        }
+
+                        ?>
+                    </div>
+                </div>
+            <?php
+            }
+            ?>
         </div>
     </div>
     </div>
