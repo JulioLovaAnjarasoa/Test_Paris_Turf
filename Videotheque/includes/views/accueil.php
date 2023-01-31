@@ -67,14 +67,14 @@ function get_popular_movies($apiKey)
             </div>
             <div class="col py-3">
                 <div class="row">
-
+                    <h3>Top rated movies</h3>
                     <?php
                     $popular_movies = get_popular_movies($apiKey)['results'];
                     foreach ($popular_movies as $movie) {
                     ?>
                         <div class="col-2 card mb-2">
                             <div class="col-md-4">
-                                <img src="https://image.tmdb.org/t/p/original/<?php echo $movie['poster_path'] ?>" class="img-fluid rounded-start" alt="...">
+                                <a href=""><img src="https://image.tmdb.org/t/p/original/<?php echo $movie['poster_path'] ?>" class="img-fluid rounded-start" alt="..."></a>
                             </div>
                         </div>
                     <?php
@@ -84,6 +84,7 @@ function get_popular_movies($apiKey)
 
                 </div>
                 <div class="row">
+                    <h1>Discover Movies</h1>
                     <?php
                     $movies = get_movies_list($apiKey)['results'];
                     // var_dump($movies);
@@ -92,7 +93,7 @@ function get_popular_movies($apiKey)
                     ?>
                         <div class="col-4 card mb-2">
                             <div class="">
-                                <img src="https://image.tmdb.org/t/p/original/<?php echo $movie['poster_path'] ?>" class="img-fluid rounded-start" alt="...">
+                                <a href=""><img src="https://image.tmdb.org/t/p/original/<?php echo $movie['poster_path'] ?>" class="img-fluid rounded-start" alt="..."></a>
                             </div>
                             <div class="">
                                 <div class="card-body">
