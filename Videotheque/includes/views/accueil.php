@@ -27,7 +27,7 @@ function get_popular_movies($apiKey)
 
 function get_movies_by_types($apiKey, $id)
 {
-    $url = "https://api.themoviedb.org/3/movie/" . $id . "/lists?api_key=" . $apiKey;
+    $url = "https://api.themoviedb.org/3/movie/" . $id . "/videos?api_key=" . $apiKey;
     $movies_list = get_api($url);
 
     return $movies_list;
@@ -75,7 +75,7 @@ function get_movies_by_types($apiKey, $id)
             ?>
                 <div class="col py-3">
                     <div class="row">
-                        <h1>Discover Movies</h1>
+                        <h1>Movies</h1>
                         <?php
                         $movies = get_movies_by_types($apiKey, $_GET['genre'])['results'];
                         var_dump($movies);
